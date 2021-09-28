@@ -1,0 +1,125 @@
+Versionado de software
+----------------------
+
+* Registrar cambios en archivos
+* Visualizar que se modificó, cuándo y quién lo hizo.
+* Posibilidad de volver atrás las versiones
+
+
+### Ventajas
+* Posee histórico de los proyectos
+* Lleva estadísticas defl proyecto
+* Mayor flexibilidad ante modificaciones
+* Facilita el trabajo en equipo y su administración
+* Mejora el compromiso
+
+### Desventajas
+* Curva de aprendizaje elevada
+
+
+Sistemas de control centralizados
+---------------------------------
+* Un único servidor contiene los archivos
+* El cliente descarga la última versión y cargan archivos en dicho servidor
+Desventajas
+* Baja tolerancia a fallos
+* Recuperación compleja
+
+Sistemas de control distribuidos
+--------------------------------
+* Los clientes no solo descargan una copia, sino todo el repositorio
+* Cada clon es una copia completa del repo
+* Pueden registrarse cambios aún sin conexión
+* Facilita la recuperación y aumenta la tolerancia a fallos
+* Si un servidor deja de funcionar, cualquiera de los repositorios disponibles en los clientes puede ser copiado al servidor con el fin de restaurarlo
+
+
+
+GIT
+---
+Conserva una única versión de cada archivo
+Toma una "foto" de los cambios (commit)
+
+
+add 		? Guardar los cambios del borrador
+log 		? Verificar los cambios que se hicieron
+commit	 	? Guardar finalmente los cambios
+status 		? Indica el estado de los archhivos en la rana
+diff		? Muestra diferencias entre proyectos
+
+git config --global user.name "mgasperini"	?	Cambiar nombre de usuario
+git config --global user.email "matiasgasperini@gmail.com"
+
+git add "Archivo.ext" o git add . (Agrega todo lo que hay en la carpeta)
+
+Para quitar el status de "add":
+
+git rm --cached "archivo a quitar del commit"	?	Mantiene el archivo en el sistema
+git rm "archivo"				?	Elimina el archivo del sistema
+
+git checkout "nombre del archivo"			?	Quita los cambios realizados al archivo (Resetea a como está en el repositorio)	
+
+git commit -m "Mensaje del commit"
+
+Para cambiar el nombre de un archivo/directorio manteniendo los cambios en el staging area:
+git mv "nombre antiguo" "nombre nuevo"		?	Cambio el nombre de un archivo
+git mv "nombre antiguo"/ "nombre nuevo"/		?	Cambio el nombre de un directorio
+
+git reflock ? Puedo recuperar archivos sobreescritos
+
+
+Repositorios remotos
+--------------------
+
+git remote -v 	?	Me muestra los remotos que tengo asociados
+
+git remote add "nombre del repositorio" "URL del repositorio remoto"
+
+Siempre antes de hacer el PUSH
+git branch -M main 	? Nos cambiamos a la rama MAIN
+git push -u "nombre del repositorio" main 	?	sube al repositorio remoto lo que tenemos commiteado en el repositorio local
+
+
+-u	?	Configura el upstream para la rama que se esté usando, esto permite que luego no sea necesario llamar siempre por repositorio y rama, sino que se sube por defecto aquel que se configuró con "-u"
+
+
+### GIT clone
+git clone "url del repositorio"	?	Se clona en la carpeta actual
+
+Descarga un repositorio completo con todas las actualizaciones de un repositorio remoto
+
+### GIT pull
+
+git checkout master		?		Pasamos a la rama master del proyecto
+git pull origin master		?		Descargamos la última versión
+Si estamos trabajando con alguien más. Nos trae los últimos cambios realizados en el repositorio
+
+### GIT branch
+Es conveniente mergear en la máquina local y luego subir al remoto
+
+git branch "nombre de la rama"					?	Creo una nueva rama para poder trabajar en ella y no pisar el master
+git checkout "nombre de la rama"				?	Pasamos a trabajar sobre la rama
+git branch											?	Me muestra las ramas en el repositorio local
+git remote branch								?	Me muestra las ramas en el remoto
+git branch --merged								?	Me muestra las ramas que se unieron
+git merge "nombre de la rama"					?	Uno mi nueva rama al main
+git push origin master							?	Estoy subiendo la rama master (ya mergeada)
+git push origin --delete "nombre de la rama"	?	Elimino la rama del remoto ya que no la voy a usar nuevamente
+git branch -d "nombre de la rama"				?	Elimino la rama de mi repositorio
+
+
+Si al momento de guardar, los cambios se realizaron sobre la branch 'master' y no era lo que quería hacer, lo conveniente es pasar esos cambios a otra rama y luego resetear la branch master al estado inicial
+
+git chechout "nueva branch"															?	ME muevo a la nueva rama
+git cherry-pick "hash del commit de la branch master (el que queremos copiar)"	?	Copio el commit de la rama master a la nueva rama
+
+git chechout master																	?	Me muevo a la branch master
+git reset --soft	"hash del commit"												?	Resetea la rama en modo "soft" quita los cambios pero los deja en el staging area
+git reset (--mixt)	"hash del commit"												?	Resetea la rama, y quita los cambios del staging area inclusive.
+git reset --hard	"hash del commit"												?	Resetea la rama y borra todo tipo de cambios
+
+
+
+### GIT rebase
+
+Con rebase puedo unir commits en una sola linea secuencial en lugar de guardarlos como cambios paralelos, la ventaja es que el historial de cambios será más limpio.
